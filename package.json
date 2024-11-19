@@ -1,0 +1,16 @@
+{
+  "name": "vanilla-football-leagues",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@prismicio/client": "^7.11.1",
+    "@prismicio/helpers": "^2.3.9"
+  }
+}
