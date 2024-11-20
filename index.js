@@ -3,7 +3,7 @@ import { asHTML } from 'https://cdn.skypack.dev/@prismicio/helpers';
 
 const htmlSerializer = (type, element, content, children) => {
   if (type === 'label' && element.data.label === 'codespan') {
-    return `<code>${children.join('')}</code>`;
+    return `<code>${children}</code>`;
   }
   return null;
 };
@@ -23,7 +23,7 @@ const LeagueCard = (league) => {
   const formattedDate = formatDate(league.date);
 
   return `
-    <div class="card league-card" data-league-id="${league.id}">
+    <div class="card league-card" data-league-id="${league.id}" data-league-uid="${league.uid}">
       <img src="${league.logo}" alt="${league.name}" class="league-logo" />
       <h2>${league.name}</h2>
       <p>Last Updated: ${formattedDate}</p>
@@ -70,6 +70,7 @@ const renderLeagues = async () => {
           name: leagueData.name[0].text,
           id: league.id,
           date: league.last_publication_date,
+          uid: league.uid
         });
       })
       .join('');
@@ -83,6 +84,8 @@ const renderLeagues = async () => {
     leagueCards.forEach((card) => {
       card.addEventListener('click', () => {
         const leagueId = card.getAttribute('data-league-id');
+        const leagueUid = card.getAttribute('data-league-uid');
+        window.location.hash = `#/league/${leagueUid}`;
         renderTeams(leagueId);
       });
     });
