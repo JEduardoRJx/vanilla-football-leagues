@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Preview</title>
+    <script type="module">
+      import { createClient } from 'https://cdn.skypack.dev/@prismicio/client';
+
+      const repositoryName = 'vanilla-leagues';
+      const client = createClient(repositoryName, {
+        routes: [
+          {
+            type: 'league',
+            path: '/#/league/:uid',
+          },
+        ],
+      });
+
+      const init = async () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        const documentId = urlParams.get('documentId');
+
+        if (!token || !documentId) {
+          document.body.innerHTML =
+            '<h1>Error: Missing token or document ID in URL parameters.</h1>';
+          return;
+        }
+
+        try {
+          const document = await client.getByID(documentId, { ref: token });
+          const resolvedUrl = `/#/league/${document.uid}`;
+          window.location.replace(resolvedUrl);
+        } catch (error) {
+          document.body.innerHTML = '<h1>Error resolving preview URL</h1>';
+        }
+      };
+
+      init();
+    </script>
+  </head>
+  <body>
+    <h1>Loading Preview...</h1>
+  </body>
+</html>
