@@ -20,20 +20,25 @@
       const init = async () => {
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');
-        const documentId = urlParams.get('documentId');
 
-        if (!token || !documentId) {
-          document.body.innerHTML =
-            '<h1>Error: Missing token or document ID in URL parameters.</h1>';
+        if (!token) {
+          console.error('No preview token found.');
           return;
         }
 
         try {
-          const document = await client.getByID(documentId, { ref: token });
-          const resolvedUrl = `/#/league/${document.uid}`;
+          const resolvedUrl = await client.resolvePreviewURL({
+            defaultURL: '/#/',
+            previewToken: token,
+          });
+
+          if (!resolvedUrl || resolvedUrl === '/') {
+            console.warn('resolvePreviewURL did not return a valid route.');
+          }
+
           window.location.replace(resolvedUrl);
         } catch (error) {
-          document.body.innerHTML = '<h1>Error resolving preview URL</h1>';
+          console.error('Error resolving preview URL:', error);
         }
       };
 
