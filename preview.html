@@ -22,7 +22,7 @@
         const token = urlParams.get('token');
 
         if (!token) {
-          console.error('No preview token found.');
+          document.body.innerHTML = '<h1>Error: Missing preview token</h1>';
           return;
         }
 
@@ -32,13 +32,14 @@
             previewToken: token,
           });
 
-          if (!resolvedUrl || resolvedUrl === '/') {
-            console.warn('resolvePreviewURL did not return a valid route.');
-          }
+          const hashResolvedUrl = resolvedUrl.startsWith('/#/')
+            ? resolvedUrl
+            : `/#${resolvedUrl.slice(1)}`;
 
-          window.location.replace(resolvedUrl);
+          window.location.replace(hashResolvedUrl);
         } catch (error) {
           console.error('Error resolving preview URL:', error);
+          document.body.innerHTML = '<h1>Error resolving preview</h1>';
         }
       };
 
