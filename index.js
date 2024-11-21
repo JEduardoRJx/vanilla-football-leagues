@@ -6,7 +6,7 @@ const client = createClient(repositoryName, {
   routes: [
     {
       type: 'league',
-      path: '/#/league/:uid',
+      path: '/league/:uid',
     },
   ],
 });
@@ -100,7 +100,7 @@ const renderLeagues = async () => {
   document.querySelectorAll('.league-card').forEach((card) => {
     card.addEventListener('click', () => {
       const leagueUid = card.getAttribute('data-league-uid');
-      window.location.hash = `/league/${leagueUid}`;
+      window.history.pushState({}, '', `/league/${leagueUid}`);
       renderTeams(card.getAttribute('data-league-id'));
     });
   });
@@ -137,7 +137,7 @@ const renderTeams = async (leagueId) => {
 };
 
 const init = async () => {
-  const hash = window.location.hash.slice(1);
+  const hash = window.location.pathname;
   const parts = hash.split('/').filter(Boolean);
 
   if (parts[0] === 'league' && parts[1]) {
@@ -151,5 +151,5 @@ const init = async () => {
 };
 
 init();
-window.addEventListener('hashchange', init);
+window.addEventListener('popstate', init);
 window.addEventListener('load', init);
